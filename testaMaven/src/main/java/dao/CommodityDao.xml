@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.CommodityDao">
+
+	<select id="searchAll" resultMap="ComAndPic">
+		select c.*,pic.*,pic.id as
+		picId from commodity as c inner join picture as pic on c.id=pic.com_id
+		where pic.index=1
+	</select>
+	<resultMap type="entity.Commodity" id="ComAndPic">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<result property="no" column="no" />
+		<result property="stock" column="stock" />
+		<result property="saleNum" column="saleNum" />
+		<result property="content" column="content" />
+		<collection property="pics" ofType="entity.Picture">
+			<result property="id" column="PicId" />
+			<result property="fileName" column="fileName" />
+			<result property="index" column="index" />
+		</collection>
+
+	</resultMap>
+
+	<select id="searchAllLazy" resultMap="ComAndPicLazy">
+		select * from commodity
+	</select>
+	<resultMap type="entity.Commodity" id="ComAndPicLazy">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="price" column="price" />
+		<result property="no" column="no" />
+		<result property="stock" column="stock" />
+		<result property="saleNum" column="saleNum" />
+		<result property="content" column="content" />
+		<collection property="pics" column="id"
+			select="dao.PictureDao.selectByCom">
+
+		</collection>
+
+	</resultMap>
+
+
+</mapper> 
+    
